@@ -2,10 +2,19 @@
 //
 
 #include <iostream>
-
+#include "LexicalAnalyzer.h"
+using namespace std;
 int main()
 {
-    std::cout << "Hello World!\n";
+    LexicalAnalyzer *la = new LexicalAnalyzer();
+    string input;
+    while (true) {
+        cout << "输入字符串" << endl;
+        cin >> input;
+        input.append("#");
+        cout << "你输入了" << input << endl;
+        la->testId(input);
+    } 
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

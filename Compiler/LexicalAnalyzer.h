@@ -1,5 +1,6 @@
 #pragma once
 #include<string>
+#include <iostream>
 using namespace std;
 class Token {
 	int type;//类型
@@ -11,4 +12,5 @@ private :
 public:
 	void makeTokenList(string input);//将源输入转化为token序列
 	Token getToken();//语法分析器调用，从token序列中返回一个token
+	void testId(string input);//尝试识别标识符
 };
