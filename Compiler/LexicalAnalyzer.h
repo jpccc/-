@@ -2,11 +2,23 @@
 #include<string>
 #include <iostream>
 using namespace std;
+enum TokenType {
+	ID,//标识符
+	ReservedWord,//保留字
+	INTC,//无符号整数
+	OneCharDelimiter,//单字符分界符
+	TwoCharDelimiter,//双字符分界符
+	CommentHeader,//注释头符
+	CommentTerminator,//注释结束符
+	Character,//字符起始和结束符
+	ArraySubscript//数组下标界限符
+};
+
 const int reserved_count = 21;
 static const char* reserved_word[reserved_count] = { "char","int","var","program","integer","procedure","array","begin","while","if","then","else","endwh",
 "end","read","of","record","fi","return","write","type" };
 struct Token {
-	int type;//类型 2:保留字
+	TokenType type;//类型
 	string value;//内容
 	Token* next;
 };
@@ -21,6 +33,7 @@ public:
 	static int srearch_ReservedWord(string st);
 	static void makeTokenList(string input);//将源输入转化为token序列
 	static Token getToken();//语法分析器调用，从token序列中返回一个token
+	void testId(string input);
 };
 
 void LexicalAnalyzer::insert_List(Token* token) {
