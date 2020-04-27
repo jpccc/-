@@ -18,12 +18,21 @@
     <ClCompile Include="Compiler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LexicalAnalyzer.cpp">
+    <ClCompile Include="LexicalAnalyzerByTS.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LexicalAnalyzerByJPC.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LexicalAnalyzer.h">
+    <ClInclude Include="PublicSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LexicalAnalyzerByTS.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LexicalAnalyzerByJPC.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

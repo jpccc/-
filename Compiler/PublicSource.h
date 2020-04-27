@@ -1,0 +1,23 @@
+#pragma once
+#include<string>
+using namespace std;
+enum TokenType {
+	ID,//标识符
+	ReservedWord,//保留字
+	INTC,//无符号整数
+	OneCharDelimiter,//单字符分界符
+	TwoCharDelimiter,//双字符分界符
+	CommentHeader,//注释头符
+	CommentTerminator,//注释结束符
+	Character,//字符起始和结束符
+	ArraySubscript//数组下标界限符
+};
+
+const int reserved_count = 21;
+static const char* reserved_word[reserved_count] = { "char","int","var","program","integer","procedure","array","begin","while","if","then","else","endwh",
+"end","read","of","record","fi","return","write","type" };
+struct Token {
+	TokenType type;//类型
+	string value;//内容
+	Token* next;
+};
