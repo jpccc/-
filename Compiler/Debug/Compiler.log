@@ -1,14 +1,2 @@
-﻿  Compiler.cpp
-  LexicalAnalyzerByJPC.cpp
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByJPC.cpp(6,2): error C2143: 语法错误: 缺少“;”(在“}”的前面)
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByJPC.cpp(9,10): error C2059: 语法错误:“)”
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByJPC.cpp(32,15): warning C4018: “<”: 有符号/无符号不匹配
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByJPC.cpp(71,28): error C2440: “=”: 无法从“int”转换为“TokenType”
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByJPC.cpp(71,27): message : 强制转换为枚举类型要求显式强制转换(static_cast、C 样式强制转换或函数样式强制转换)
-  LexicalAnalyzerByTS.cpp
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByTS.cpp(6,2): error C2143: 语法错误: 缺少“;”(在“}”的前面)
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByTS.cpp(9,10): error C2059: 语法错误:“)”
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByTS.cpp(32,15): warning C4018: “<”: 有符号/无符号不匹配
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByTS.cpp(71,28): error C2440: “=”: 无法从“int”转换为“TokenType”
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByTS.cpp(71,27): message : 强制转换为枚举类型要求显式强制转换(static_cast、C 样式强制转换或函数样式强制转换)
-  正在生成代码...
+﻿  LexicalAnalyzerByJPC.cpp
+  Compiler.vcxproj -> E:\项目\C++\编译原理\jpccc\Compiler\Compiler\Debug\Compiler.exe
