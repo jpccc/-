@@ -150,6 +150,7 @@
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="LexicalAnalyzerByJPC.cpp" />
     <ClCompile Include="LexicalAnalyzerByTS.cpp" />
+    <ClCompile Include="publicSource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LexicalAnalyzerByJPC.h" />

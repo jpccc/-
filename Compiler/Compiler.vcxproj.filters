@@ -24,6 +24,9 @@
     <ClCompile Include="LexicalAnalyzerByJPC.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="publicSource.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PublicSource.h">
