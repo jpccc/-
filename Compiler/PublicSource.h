@@ -21,6 +21,8 @@ enum State {//状态机中的状态
 const int reserved_count = 21;
 static const char* reserved_word[reserved_count] = { "char","int","var","program","integer","procedure","array","begin","while","if","then","else","endwh",
 "end","read","of","record","fi","return","write","type" };
+const int OneCharDelimiter_count = 16;
+static const char oneChar_delimiter[OneCharDelimiter_count] = { '+','-','*','/','<','=','>','(',')','[',']','.',';',EOF,' ','\n' };
 struct Token {
 	TokenType type;//类型
 	string value;//内容
@@ -30,3 +32,6 @@ struct Token {
 };
 bool isLetter(char ch);//判断字符是否为字母
 bool isNumber(char ch);//判断字符是否为数字
+bool isNumberExcpZero(char ch);//判断字符是否为非0的数字
+bool isOneCharDelimiter(char ch);//判断字符是否为单字符分界符
+bool isReservedWord(string st);//判断是否为保留字
