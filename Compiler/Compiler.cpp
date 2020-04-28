@@ -13,6 +13,7 @@ int main()
     string filename = "orign.txt";//debug目录下
     string input;//存储源程序
     ReadChar(filename, input);
+ 
     /***********************词法分析返回Token序列,注释直接丢弃****************/
     LexicalAnalyzerByJPC lexicalAnalyzer(input);
     lexicalAnalyzer.makeTokenList();
@@ -22,6 +23,7 @@ int main()
         cout << t->value << "  " << t->type << endl;
         t = t->next;
     }
+    
     /********************************语法分析********************************/
 
     //LexicalAnalyzerByTS::debugging();
@@ -44,5 +46,5 @@ void ReadChar(string fileName,string& input) {
             inFile >> c;
         }
     }
-    input.append(1, '#');
+    input.append(1, EOF);
 }

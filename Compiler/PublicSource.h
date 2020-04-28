@@ -16,7 +16,7 @@ enum State {//状态机中的状态
 	error=-1,
 	S0,
 	S1,
-	S2, S3, S4, S5, S6, S7
+	S2, S3, S4, S5, S6
 };
 // State(error-S7)直接转向伐状态机中的状态,State(error-S2)状态转换矩阵法中的状态
 const int reserved_count = 21;

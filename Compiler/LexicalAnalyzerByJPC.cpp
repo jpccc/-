@@ -63,13 +63,6 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 				judge = S6;
 				break;
 			}
-			if (CurrentChar == '#')//结束标志,count指向下一个要读的位置,结束后在数值上等于iSize
-			{
-				tokenType = OneCharDelimiter;
-				insert_List(new Token(tokenType, "EOF"));
-				count++;//此时count>iSize
-				break;
-			}
 			break;
 		case S1:		//字母
 			word = word + CurrentChar;		//这时CurrentChar肯定是字母
@@ -119,6 +112,11 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 			}
 			backOne(count, CurrentChar, NextChar);
 			tokenType = OneCharDelimiter;
+			if (CurrentChar == EOF)//结束标志,count指向下一个要读的位置,结束后在数值上等于iSize
+			{
+				insert_List(new Token(tokenType, "EOF"));
+				return;//结束了
+			}
 			insert_List(new Token(tokenType,word));
 			finded = true;
 			break;
@@ -144,9 +142,7 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 					finded = true;
 					break;
 				}
-				
 			}
-			judge = S0;
 			break;
 		case S6:		//字符起始符
 			word = word + CurrentChar;
