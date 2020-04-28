@@ -63,6 +63,7 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 				judge = S6;
 				break;
 			}
+			finded = true;
 			break;
 		case S1:		//字母
 			word = word + CurrentChar;		//这时CurrentChar肯定是字母
