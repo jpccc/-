@@ -51,4 +51,5 @@ Token::Token(TokenType type,string value)
 {
 	this->type = type;
 	this->value = value;
+	this->next = nullptr;
 }

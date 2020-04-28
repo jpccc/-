@@ -1,29 +1,22 @@
 #include"LexicalAnalyzerByJPC.h"
+char  LexicalAnalyzerByJPC::readOne(int& count) {
+	char letter=input[count];		//后期加上判断，防止越界
+	count++;		//输入串指针移动
+	return letter;
+}
+void  LexicalAnalyzerByJPC::backOne(int& count,char&CurrentChar,char& NextChar) {
+	count--;
+	CurrentChar = NextChar;
+}
 void LexicalAnalyzerByJPC::insert_List(Token* token) {
-	Token* start = TokenList;
-	if (start == NULL) {
-		TokenList = token;
-	}
+	if (TokenHead == NULL)
+		TokenHead = token;
 	else
-	{
-		while (start->next != NULL)
-			start = start->next;
-		start->next = token;
-	}
+		TokenTail->next = token;
+	token->next = NULL;
+	TokenTail = token;
 }
-int LexicalAnalyzerByJPC::srearch_ReservedWord(string st) {
-	int exist = 0;
-	for (int i = 0; i < reserved_count; i++) {
-		if (st.compare(reserved_word[i]) == 0)
-		{
-			exist = i + 1;
-			break;
-		}
-	}
-	return exist;
-}
-void LexicalAnalyzerByJPC::makeTokenList(string input) {
-
+void LexicalAnalyzerByJPC::makeTokenList() {
 	int count = 0;	//输入串遍历指针
 	int iSize = input.size();
 
@@ -31,212 +24,151 @@ void LexicalAnalyzerByJPC::makeTokenList(string input) {
 	char NextChar;//上次读取的字符
 	char CurrentChar;//当前读取的字符
 
-	int judge = 0;//选择执行哪一个分支
-	int reserved_Location;//保留字在表中的位置
-
+	State judge = S0;//选择执行哪一个分支
 	bool finded = false;//已经识别了一个单词
 
-	Token* reserved_word = NULL;
-	TokenType tokenType = ID;
-	CurrentChar = input[count];
+	TokenType tokenType;//单词的种类
+	CurrentChar = readOne(count);
 	NextChar = CurrentChar;
-	count++;		//输入串指针移动
-	while (count < iSize) {
+	while (count <= iSize) {
 		switch (judge) {
-		case 0:		//起始状态
-			if (('a' <= CurrentChar && CurrentChar <= 'z') || ('A' <= CurrentChar && CurrentChar <= 'Z'))
+		case S0:		//起始状态
+			if (isLetter(CurrentChar))
 			{
-				judge = 1;
+				judge = S1;
 				break;
 			}
-			if ('0' <= CurrentChar && CurrentChar <= '9')
+			if (isNumber(CurrentChar))
 			{
-				judge = 2;
+				judge = S2;
 				break;
 			}
-			if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '*' || CurrentChar == '/' || CurrentChar == '<' || CurrentChar == '=' || CurrentChar == '(' || CurrentChar == ')' || CurrentChar == '['
-				|| CurrentChar == ']' || CurrentChar == '.' || CurrentChar == ';' || CurrentChar == 'EOF' || CurrentChar == ' ')
+			if (isOneCharDelimiter(CurrentChar))
 			{
-				judge = 3;
-				break;
-			}
-			if (CurrentChar == ':')
-			{
-				judge = 4;
+				judge = S3;
 				break;
 			}
 			if (CurrentChar == ':')
 			{
-				judge = 5;
+				judge = S4;
 				break;
 			}
-			if (CurrentChar == ':')
+			if (CurrentChar == '{')
 			{
-				judge = 6;
+				judge = S5;
 				break;
 			}
 			if (CurrentChar == '\'')
 			{
-				judge = 7;
+				judge = S6;
 				break;
 			}
-			if (CurrentChar == '#')//结束标志
+			if (CurrentChar == '#')//结束标志,count指向下一个要读的位置,结束后在数值上等于iSize
 			{
-				judge = 9;	//	暂时设定
+				tokenType = OneCharDelimiter;
+				insert_List(new Token(tokenType, "EOF"));
+				count++;//此时count>iSize
 				break;
 			}
 			break;
-		case 1:		//字母
+		case S1:		//字母
 			word = word + CurrentChar;		//这时CurrentChar肯定是字母
-
-			CurrentChar = input[count];		//后期加上判断，防止越界
-			count++;		//输入串指针移动
-			if (('a' <= CurrentChar && CurrentChar <= 'z') || ('A' <= CurrentChar && CurrentChar <= 'Z') || ('0' <= CurrentChar && CurrentChar <= '9'))
+			CurrentChar = readOne(count);
+			if (isLetter(CurrentChar)||isNumber(CurrentChar))
 			{
 				NextChar = CurrentChar;
 				break;
 			}
-			count--;			//不是标识符，Back
-			CurrentChar = NextChar;
-			reserved_Location = srearch_ReservedWord(word);
-			if (reserved_Location == 0)				//保留字? 若返回0，表里找不到，则为标识符，
+			backOne(count, CurrentChar, NextChar);
+			if (!isReservedWord(word))				//保留字? 若返回0，表里找不到，则为标识符，
 			{
-				reserved_word = new Token();
 				tokenType = ID;
-				reserved_word->type = tokenType;
-				reserved_word->value = word;
-				reserved_word->next = NULL;
-				insert_List(reserved_word);
+				insert_List(new Token(tokenType,word));
 			}
 			else
 			{
-				reserved_word = new Token();
 				tokenType = ReservedWord;
-				reserved_word->type = tokenType;
-				reserved_word->value = word;
-				reserved_word->next = NULL;
-				insert_List(reserved_word);
+				insert_List(new Token(tokenType, word));
 			}
-			finded = true;
+			finded = true;//找到一个单词
 			break;
-		case 2:		//数字
+		case S2:		//数字
 			word = word + CurrentChar;		//这时CurrentChar肯定是字母
-			CurrentChar = input[count];		//后期加上判断，防止越界
-			count++;		//输入串指针移动
-			if ('0' <= CurrentChar && CurrentChar <= '9')
+			CurrentChar = readOne(count);
+			if (isNumber(CurrentChar))
 			{
 				NextChar = CurrentChar;
 				break;
 			}
-			count--;			//不是标识符，Back
-			CurrentChar = NextChar;
-			reserved_word = new Token();
+			backOne(count, CurrentChar, NextChar);
 			tokenType = INTC;
-			reserved_word->type = tokenType;
-			reserved_word->value = word;
-			reserved_word->next = NULL;
-			insert_List(reserved_word);
+			insert_List(new Token(tokenType, word));
 			finded = true;
 			break;
-		case 3: //单字符分界
+		case S3: //单字符分界
 			word = word + CurrentChar;
-
-			CurrentChar = input[count];		//后期加上判断，防止越界
-			count++;		//输入串指针移动
+			CurrentChar = readOne(count);
 			if (NextChar == '.' && CurrentChar == '.')
-			{
+			{//数组分节符
 				NextChar = CurrentChar;
-				judge = 8;
+				word = word + CurrentChar;
+				tokenType = ArraySubscript;
+				insert_List(new Token(tokenType, word));
+				finded = true;
 				break;
 			}
-			count--;			//不是标识符，Back
-			CurrentChar = NextChar;
-			reserved_word = new Token();
+			backOne(count, CurrentChar, NextChar);
 			tokenType = OneCharDelimiter;
-			reserved_word->type = tokenType;
-			reserved_word->value = word;
-			reserved_word->next = NULL;
-			insert_List(reserved_word);
+			insert_List(new Token(tokenType,word));
 			finded = true;
 			break;
-		case 4:	//双字符分界
+		case S4:	//双字符分界
 			word = word + CurrentChar;		//这时CurrentChar肯定是字母
-			CurrentChar = input[count];		//后期加上判断，防止越界
-			count++;		//输入串指针移动
+			CurrentChar = readOne(count);
 			if (CurrentChar == '=') {
 				word = word + CurrentChar;
-				reserved_word = new Token();
 				tokenType = TwoCharDelimiter;
-				reserved_word->type = tokenType;
-				reserved_word->value = word;
-				reserved_word->next = NULL;
-				insert_List(reserved_word);
+				insert_List(new Token(tokenType, word));
 				finded = true;
 			}
 			else {
-				cout << "error" << endl;
+				cout << "error,有单词错误" << endl;
 				exit(1);
 			}
 			break;
-		case 5:			//注释起始
-			word = word + CurrentChar;
-			reserved_word = new Token();
-			tokenType = CommentHeader;
-			reserved_word->type = tokenType;
-			reserved_word->value = word;
-			reserved_word->next = NULL;
-			insert_List(reserved_word);
-			finded = true;
+		case S5:			//注释起始
+			while (count < iSize) {
+				CurrentChar = readOne(count);
+				if (CurrentChar == '}')
+				{
+					finded = true;
+					break;
+				}
+				
+			}
+			judge = S0;
 			break;
-
-		case 6:		//注释结束
+		case S6:		//字符起始符
 			word = word + CurrentChar;
-			reserved_word = new Token();
-			tokenType = CommentTerminator;
-			reserved_word->type = tokenType;
-			reserved_word->value = word;
-			reserved_word->next = NULL;
-			insert_List(reserved_word);
-			finded = true;
-			break;
-
-		case 7:		//字符起始符
-			word = word + CurrentChar;
-			reserved_word = new Token();
 			tokenType = Character;
-			reserved_word->type = tokenType;
-			reserved_word->value = word;
-			reserved_word->next = NULL;
-			insert_List(reserved_word);
-			finded = true;
-			break;
-		case 8://数组下标界限符
-			word = word + CurrentChar;
-			reserved_word = new Token();
-			tokenType = ArraySubscript;
-			reserved_word->type = tokenType;
-			reserved_word->value = word;
-			reserved_word->next = NULL;
-			insert_List(reserved_word);
+			insert_List(new Token(tokenType, word));
 			finded = true;
 			break;
 		default:
+			cout << "error" << endl;
 			break;
 		}
 		if (finded)
 		{
-			CurrentChar = input[count];		//后期加上判断，防止越界
+			CurrentChar = readOne(count);
 			NextChar = CurrentChar;
-			count++;		//输入串指针移动
-			judge = 0;	//回到起始
+			judge = S0;	//回到起始
 			word = "";
 			finded = false;
 		}
-		if (judge == 9)	//跳出while循环	
-			break;
 	}
 }
 Token* LexicalAnalyzerByJPC::getToken()
 {
-	return TokenList;
+	return TokenHead;
 }

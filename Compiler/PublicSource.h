@@ -16,8 +16,9 @@ enum State {//状态机中的状态
 	error=-1,
 	S0,
 	S1,
-	S2
+	S2, S3, S4, S5, S6, S7
 };
+// State(error-S7)直接转向伐状态机中的状态,State(error-S2)状态转换矩阵法中的状态
 const int reserved_count = 21;
 static const char* reserved_word[reserved_count] = { "char","int","var","program","integer","procedure","array","begin","while","if","then","else","endwh",
 "end","read","of","record","fi","return","write","type" };
