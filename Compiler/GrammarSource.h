@@ -32,7 +32,7 @@ private:
 public:
 	GrammarAnalyzer(Token* TokenStart) {
 		currentToken = TokenStart;
-		Stack.push("#");
+		Stack.push("EOF");
 		Stack.push("E");
 		cout << "³õÊ¼»¯" << endl;
 	}

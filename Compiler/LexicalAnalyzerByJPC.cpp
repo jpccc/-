@@ -111,16 +111,16 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 				finded = true;
 				break;
 			}
+			backOne(count, CurrentChar, NextChar);
 			if (CurrentChar == ' ')
 			{
 				finded = true;
 				break;
 			}
-			backOne(count, CurrentChar, NextChar);
 			tokenType = OneCharDelimiter;
 			if (CurrentChar == EOF)//结束标志,count指向下一个要读的位置,结束后在数值上等于iSize
 			{
-				insert_List(new Token(tokenType, "#"));//EOF
+				insert_List(new Token(tokenType, "EOF"));//EOF
 				return;//结束了
 			}
 			insert_List(new Token(tokenType,word));

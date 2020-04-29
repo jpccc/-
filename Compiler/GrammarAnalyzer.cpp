@@ -45,7 +45,7 @@ void GrammarAnalyzer::initialize() {
 	tCharacters[2] = "*";
 	tCharacters[3] = "(";
 	tCharacters[4] = ")";
-	tCharacters[5] = "#";
+	tCharacters[5] = "EOF";
 	//初始化分析表
 	AnalysisTable[0][0] = 1;
 	AnalysisTable[0][3] = 1;

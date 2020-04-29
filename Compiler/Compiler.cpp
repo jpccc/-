@@ -24,7 +24,6 @@ int main()
         cout << t->value << "  " << t->type << endl;
         t = t->next;
     }
-    
     /********************************语法分析********************************/
 
     GrammarAnalyzer grammarAnalyzer(start);
