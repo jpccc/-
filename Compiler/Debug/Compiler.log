@@ -1,7 +1,4 @@
-﻿  Compiler.cpp
-  LexicalAnalyzerByJPC.cpp
-  LexicalAnalyzerByTS.cpp
-  publicSource.cpp
-  正在生成代码...
-D:\编译原理课程设计\Compiler\Compiler\LexicalAnalyzerByTS.cpp(169): warning C4715: “LexicalAnalyzerByTS::testOtherChar”: 不是所有的控件路径都返回值
-  Compiler.vcxproj -> D:\编译原理课程设计\Compiler\Compiler\Debug\Compiler.exe
+﻿  GrammarAnalyzer.cpp
+E:\项目\C++\Compiler\Compiler\GrammarAnalyzer.cpp(78): warning C4715: “GrammarAnalyzer::tLocation”: 不是所有的控件路径都返回值
+E:\项目\C++\Compiler\Compiler\GrammarAnalyzer.cpp(73): warning C4715: “GrammarAnalyzer::nLocation”: 不是所有的控件路径都返回值
+  Compiler.vcxproj -> E:\项目\C++\Compiler\Compiler\Debug\Compiler.exe

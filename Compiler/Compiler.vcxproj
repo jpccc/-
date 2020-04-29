@@ -148,11 +148,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Compiler.cpp" />
+    <ClCompile Include="GrammarAnalyzer.cpp" />
     <ClCompile Include="LexicalAnalyzerByJPC.cpp" />
     <ClCompile Include="LexicalAnalyzerByTS.cpp" />
     <ClCompile Include="publicSource.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GrammarSource.h" />
     <ClInclude Include="LexicalAnalyzerByJPC.h" />
     <ClInclude Include="LexicalAnalyzerByTS.h" />
     <ClInclude Include="PublicSource.h" />
