@@ -31,6 +31,17 @@ struct Token {
 	Token();
 	Token(TokenType type, string value);
 };
+
+struct Symbol {//文法符号
+	bool isTerminal;//是否是终极符
+	string value;//符号内容
+	Symbol* next;//链表指针
+};
+struct Production {//产生式
+	int orderNum;//标记产生式的序号
+	Symbol Left;//产生式左部
+	Symbol* Right;//产生式右部,链表形式
+};
 bool isLetter(char ch);//判断字符是否为字母
 bool isNumber(char ch);//判断字符是否为数字
 bool isNumberExcpZero(char ch);//判断字符是否为非0的数字

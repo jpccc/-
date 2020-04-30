@@ -10,7 +10,7 @@ void ReadChar(string fileName, string& input);
 int main()
 {
     /********************************读入源程序********************************/
-    string filename = "test/test0.txt";//debug目录下
+    string filename = "Debug/test/test0.txt";//debug目录下
     string input;//存储源程序
     ReadChar(filename, input);
     /***********************词法分析返回Token序列,注释直接丢弃****************/
