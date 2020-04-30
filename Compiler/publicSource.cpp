@@ -53,3 +53,59 @@ Token::Token(TokenType type,string value)
 	this->value = value;
 	this->next = nullptr;
 }
+
+Symbol::Symbol(string value)
+{
+	this->value = value;
+	isTerminal = true;
+	next = nullptr;
+}
+
+Symbol::Symbol()
+{
+	isTerminal = true;
+	value = "null";
+	next = nullptr;
+}
+
+void Production::insertRight(Symbol* symbol)
+{
+	if (RightRear == nullptr) {
+		Right = symbol;
+		RightRear = symbol;
+	}
+	else {
+		RightRear->next = symbol;
+		RightRear = symbol;
+		symbol->next = nullptr;
+	}
+}
+
+void Production::printProduction()
+{
+	cout << Left.value <<"("<<Left.isTerminal <<")"<< "->";
+	Symbol* p = Right;
+	while (p != nullptr) {
+		cout << p->value <<"("<<p->isTerminal <<")"<< ' ';
+		p = p->next;
+	}
+	cout << endl;
+}
+
+Symbol* Production::findSymbolInRight(Symbol symbol)
+{
+	Symbol* p=Right;
+	while (p != nullptr) {
+		if (!p->value.compare(symbol.value)) {
+			return p;
+		}
+		p = p->next;
+	}
+	return nullptr;
+}
+
+Production::Production()
+{
+	Right = nullptr;
+	RightRear = nullptr;
+}
