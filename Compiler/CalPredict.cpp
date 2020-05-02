@@ -25,10 +25,27 @@ void CalPredict::readProductions()
 
 void CalPredict::calPredict()
 {
-    for (int i = 0; i < CountProduction; i++) {
-        Production prod = Productions[i];
+   // if (isblank) {
+   //     calFakePredict();//求出带有非终极符的predict集
+   // }
+   // else {
+   //     while (!calFinish()) {//calFinish判断predict集中是否还有非终极符，有则视为计算还未结束
+			//killNTsymbol()//将predict集中的非终极符替换为对应终极符，也可视作替换为该非终极符的predict集
+   //     }     
+   // }
+    //  calFakePredict()
 
-    }
+	//for (int i = 0; i < CountProduction; i++) {
+	//	Production prod = Productions[i];
+	//	Symbol* right_first = new Symbol(*prod.Right);//取得右部第一个符号
+	//	if (right_first->value != "epsilon") {
+	//		insertPredict(i, right_first);
+	//	}
+	//	else {
+	//		Symbol* follow = findFollowSymbol(*prod.Left);//找到该产生式左部符号在其他产生式右部中出现时，在它后续出现的符号，返回链表
+	//		insertPredict(i, follow);//将含所有后续符号的链表加入predict集，包括非终极符
+	//	}
+	//}    
 }
 
 void CalPredict::writePredict()

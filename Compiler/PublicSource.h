@@ -38,6 +38,7 @@ struct Symbol {//文法符号
 	string value;//符号内容
 	Symbol* next;//链表指针
 	Symbol(string value);
+	Symbol(const Symbol& symbol);//拷贝函数
 	Symbol();
 };
 struct Production {//产生式

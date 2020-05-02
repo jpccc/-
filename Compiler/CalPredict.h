@@ -14,6 +14,7 @@ private:
 	Production* Productions;//所有产生式集合
 	Symbol** Predict;//每条产生式的Predict集，链表形式
 	Symbol** PredictRear;//Predict链表尾指针
+	bool isBlank = true;
 public:
 	CalPredict();
 	static void debugging();//调试程序
