@@ -61,6 +61,13 @@ Symbol::Symbol(string value)
 	next = nullptr;
 }
 
+Symbol::Symbol(const Symbol& symbol)
+{
+	isTerminal = symbol.isTerminal;
+	value = symbol.value;
+	next = nullptr;
+}
+
 Symbol::Symbol()
 {
 	isTerminal = true;
@@ -89,7 +96,6 @@ void Production::printProduction()
 		cout << p->value <<"("<<p->isTerminal <<")"<< ' ';
 		p = p->next;
 	}
-	cout << endl;
 }
 
 Symbol* Production::findSymbolInRight(Symbol symbol)

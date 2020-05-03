@@ -14,38 +14,54 @@ void CalPredict::readProductions()
     Productions = new Production[CountProduction];
     Predict = new Symbol * [CountProduction];
     PredictRear = new Symbol * [CountProduction];
+    history = new Symbol * [CountProduction];
+    TruePredict = new bool[CountProduction];
+    for (int i = 0; i < CountProduction; i++) {
+        Predict[i] = nullptr;
+        PredictRear[i] = nullptr;
+        history[i] = nullptr;
+        TruePredict[i] = false;
+    }
     int orderNum = 0;
     while (!inFile.eof()) {
         string str_prod;
 		getline(inFile,str_prod);//读取一行产生式字符串
         Productions[orderNum++]=string_to_Production(str_prod,' ');//转为类对象存入数组
     }
-    
+    getTerminalInfo();
 }
 
 void CalPredict::calPredict()
 {
-   // if (isblank) {
-   //     calFakePredict();//求出带有非终极符的predict集
-   // }
-   // else {
-   //     while (!calFinish()) {//calFinish判断predict集中是否还有非终极符，有则视为计算还未结束
-			//killNTsymbol()//将predict集中的非终极符替换为对应终极符，也可视作替换为该非终极符的predict集
-   //     }     
-   // }
-    //  calFakePredict()
+    //初始化，全部清空
+    for (int i = 0; i < CountProduction; i++) {
+        Predict[i] = nullptr;
+        PredictRear[i] = nullptr;
+        history[i] = nullptr;
+        TruePredict[i] = false;
+    }
+	calFakePredict();//求出带有非终极符的predict集
+    setTruePredict();
+	while (!calFinish()) {//从unFinishNum开始查找predict集中是否还有非终极符，有则unFinishNum赋值为第一条被发现有非终极符的产生式
+        killNTsymbol();//将predict集中的非终极符替换为对应终极符，也可视作替换为该非终极符的predict集 		
+	}
+}
 
-	//for (int i = 0; i < CountProduction; i++) {
-	//	Production prod = Productions[i];
-	//	Symbol* right_first = new Symbol(*prod.Right);//取得右部第一个符号
-	//	if (right_first->value != "epsilon") {
-	//		insertPredict(i, right_first);
-	//	}
-	//	else {
-	//		Symbol* follow = findFollowSymbol(*prod.Left);//找到该产生式左部符号在其他产生式右部中出现时，在它后续出现的符号，返回链表
-	//		insertPredict(i, follow);//将含所有后续符号的链表加入predict集，包括非终极符
-	//	}
-	//}    
+void CalPredict::calFakePredict()
+{
+    for (int i = 0; i < CountProduction; i++) {
+    	Production prod = Productions[i];
+    	Symbol* right_first = new Symbol(*prod.Right);//取得右部第一个符号
+    	if (right_first->value != "epsilon") {            
+    		insertPredict(i, right_first);
+    	}
+    	else {
+            insertFollowSymbol(i,prod.Left);//将所有左部符号的后续符号加入predict集，包括非终极符
+    	}
+        cout << "FakePredict" << i << "=";
+        printPredict(i);
+        cout << endl;
+    }    
 }
 
 void CalPredict::writePredict()
@@ -100,12 +116,37 @@ void CalPredict::printProductions()
     }
 }
 
+void CalPredict::printPredict(int orderNum)
+{
+    Symbol* p = Predict[orderNum];
+    if (p == nullptr) {
+        cout << "null";
+        return;
+    }      
+    while (p->next != nullptr) {
+        cout << p->value << ",";
+        p = p->next;
+    }
+    cout << p->value;
+
+}
+
+void CalPredict::printPredicts()
+{
+    for (int i = 0; i < CountProduction; i++) {
+        cout << i << " ";
+        Productions[i].printProduction();
+        cout << ":";
+        printPredict(i);
+        cout << endl;
+    }
+}
+
 void CalPredict::insertPredict(int orderNum, Symbol* symbol)
 {   
-    Symbol* rear = PredictRear[orderNum];
+    Symbol*& rear = PredictRear[orderNum];
     if (rear == nullptr) {
-        Symbol* head = Predict[orderNum];
-        head = symbol;
+        Predict[orderNum]= symbol;
         rear = symbol;
         symbol->next = nullptr;
     }
@@ -114,6 +155,24 @@ void CalPredict::insertPredict(int orderNum, Symbol* symbol)
         rear = symbol;
         symbol->next = nullptr;
     }
+}
+
+void CalPredict::insertPredict(int orderNum, LinkListPoints llp)
+{
+ /*   Symbol* addHead = llp.head;
+    Symbol* addRear = llp.rear;
+    Symbol* rear = PredictRear[orderNum];
+    if (rear == nullptr) {
+        Symbol* head = Predict[orderNum];
+        head = addHead;
+        rear = addRear;
+        addRear->next = nullptr;
+    }
+    else {
+        rear->next = addHead;
+        rear = addRear;
+        addRear->next = nullptr;
+    }*/
 }
 
 int CalPredict::getCountProduction(ifstream &inFile)
@@ -137,19 +196,192 @@ int CalPredict::getCountProduction(ifstream &inFile)
     return ++count;
 }
 
-CalPredict::CalPredict()
+void CalPredict::insertFollowSymbol(int orderNum,Symbol symbol)
+{
+    if (inHistory(history,orderNum,symbol)) {
+        return;
+    }
+    else {
+        insertHistory(history, orderNum, symbol);
+    }
+    cout << "insertFollow " << orderNum << "," << symbol.value<<endl;
+	for (int i = 0; i < CountProduction; i++) {        
+		Symbol* p = Productions[i].findSymbolInRight(symbol);//在产生式右部找到该符号
+        if (p == nullptr)
+            continue;
+        if (p->next != nullptr) {
+            if (findInPredict(orderNum, *p->next)==nullptr) {
+				insertPredict(orderNum, new Symbol(*p->next));//有后继符号直接插入
+            }            
+        }
+        else {
+            if (!Productions[i].Left.value.compare(Productions[orderNum].Left.value))
+                continue;
+            insertFollowSymbol(orderNum, Productions[i].Left);//已经是右部最后一个符号，插入该产生式左部的后续符号
+        }
+	}
+}
+
+bool CalPredict::inHistory(Symbol** history, int orderNum, Symbol symbol)
+{
+    Symbol* p = history[orderNum];
+    bool result = false;
+    while (p != nullptr) {
+        if (!p->value.compare(symbol.value)) {
+            result = true;
+            break;
+        }
+        p = p->next;
+    }
+    return result;
+}
+
+void CalPredict::insertHistory(Symbol** history, int orderNum, Symbol symbol)
+{
+    Symbol*& head = history[orderNum];
+    Symbol* p = head;
+    if (head == nullptr) {
+        head = new Symbol(symbol);
+        head->next = nullptr;
+    }
+    else {
+        while (p->next != nullptr) { p = p->next; }
+        p->next = new Symbol(symbol);
+        p->next->next = nullptr;
+    }
+
+}
+
+Symbol* CalPredict::findInPredict(int orderNum, Symbol symbol)
+{
+    Symbol* p = Predict[orderNum];
+    while (p != nullptr) {
+        if (!p->value.compare(symbol.value)) {
+            return p;
+        }
+        p = p->next;
+    }
+    return nullptr;
+}
+
+bool CalPredict::calFinish()
 {
     for (int i = 0; i < CountProduction; i++) {
-        Predict[i] = nullptr;
-        PredictRear[i] = nullptr;
+        if (!TruePredict[i]) {
+            return false;
+        }
     }
+    return true;
+}
+
+void CalPredict::killNTsymbol()
+{
+    for (int i = 0; i < CountProduction; i++) {
+		Symbol* p = Predict[i];
+        vector<Symbol*>* NTsymbols=new vector<Symbol*>();
+		while (p != nullptr) {
+			if (!p->isTerminal) {
+                NTsymbols->push_back(p);
+			}
+			p = p->next;
+		}
+        if (NTsymbols->size() > 0) {
+            for (int j = 0; j < NTsymbols->size(); j++) {
+				vector<int>* v = isTruePredict(*(NTsymbols->at(j)));//该符号为左部的产生式的predict集是否不包含非终极符，是则返回产生式序号的链表，否则返回空
+				if (v != nullptr) {
+					replaceNT(*(NTsymbols->at(j)), v);//在所有产生式的predict集中替换掉该非终极符					
+				}
+            }			
+        }
+    }  
+    setTruePredict();//更新TruePredict
+}
+
+bool CalPredict::isTruePredict(int orderNum)
+{
+    Symbol* p = Predict[orderNum];
+    while (p != nullptr) {
+        if (!p->isTerminal) {
+            return false;
+        }
+        p = p->next;
+    }
+    return true;
+}
+
+void CalPredict::setTruePredict()
+{
+    for (int i = 0; i < CountProduction; i++) {
+        if (isTruePredict(i)) {
+            TruePredict[i] = true;
+        }
+    }
+}
+
+vector<int>* CalPredict::isTruePredict(Symbol symbol)
+{ 
+    vector<int>* v=new vector<int>();
+    int* head = nullptr;
+	for (int i = 0; i < CountProduction; i++) {
+		if (!Productions[i].Left.value.compare(symbol.value)) {
+			if (!TruePredict[i]) {
+                return nullptr;
+            }
+            else {
+                v->push_back(i);
+            }
+		}
+	}
+    return v;
+}
+
+void CalPredict::replaceNT(Symbol symbol, vector<int>* v)
+{
+    for (int i = 0; i < CountProduction; i++) {
+        Symbol* NTsymbol =findInPredict(i,symbol) ;
+        if (NTsymbol!=nullptr) {
+            removePredict(i,NTsymbol);//删除predict集中符号
+            for (int j = 0; j < v->size(); j++) {
+                Symbol* p = Predict[(*v)[j]];
+                while (p != nullptr) {
+                    if(findInPredict(i,*p)==nullptr)
+                        insertPredict(i, new Symbol(*p));
+                    p = p->next;
+                }
+            }
+        }
+    }
+}
+
+void CalPredict::removePredict(int orderNum, Symbol* symbol)
+{
+    Symbol* last = Predict[orderNum];
+    if (symbol == Predict[orderNum]) {
+        Predict[orderNum] = Predict[orderNum]->next;
+        last = nullptr;
+    }
+    else {
+		while (last->next != symbol && last != nullptr) {
+			last = last->next;
+		}
+        last->next = symbol->next;
+    }	
+    if (symbol == PredictRear[orderNum]) {
+            PredictRear[orderNum] = last;
+    }	
+    cout << Predict[orderNum] << " " << PredictRear[orderNum] << endl;
+	delete(symbol);
+}
+
+CalPredict::CalPredict()
+{
+
 }
 
 void CalPredict::debugging()
 {
     CalPredict* CP = new CalPredict();
     CP->readProductions();
-    CP->getTerminalInfo();
-    CP->printProductions();
-    
+    CP->calPredict();
+    CP->printPredicts();
 }
