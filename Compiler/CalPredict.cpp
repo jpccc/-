@@ -73,6 +73,33 @@ void CalPredict::calFakePredict()
 
 void CalPredict::writePredict()
 {
+    ofstream outFile;
+    outFile.open(ExpressionPath);
+    if (!outFile.is_open()) {
+        cout << "Could not find the file\n";
+        cout << "Program terminating\n";
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < CountProduction; i++) {
+        outFile << Productions[i].Left.value;
+        outFile << ":";
+        Symbol* p = Productions[i].Right;
+        outFile << p->value;
+        p = p->next;
+        while (p != nullptr) {
+            outFile <<","<< p->value;
+            p = p->next;
+        }
+        outFile<< ":";
+        p = Predict[i];
+        outFile << p->value;
+        p = p->next;
+        while (p != nullptr) {
+            outFile << "," << p->value;
+            p = p->next;
+        }
+        outFile << endl;
+    }
 }
 
 Production CalPredict::string_to_Production(string str_Prod, char sep)
@@ -165,24 +192,6 @@ void CalPredict::insertPredict(int orderNum, Symbol* symbol)
         rear = symbol;
         symbol->next = nullptr;
     }
-}
-
-void CalPredict::insertPredict(int orderNum, LinkListPoints llp)
-{
- /*   Symbol* addHead = llp.head;
-    Symbol* addRear = llp.rear;
-    Symbol* rear = PredictRear[orderNum];
-    if (rear == nullptr) {
-        Symbol* head = Predict[orderNum];
-        head = addHead;
-        rear = addRear;
-        addRear->next = nullptr;
-    }
-    else {
-        rear->next = addHead;
-        rear = addRear;
-        addRear->next = nullptr;
-    }*/
 }
 
 int CalPredict::getCountProduction(ifstream &inFile)
@@ -421,4 +430,5 @@ void CalPredict::debugging()
     CP->readProductions();
     CP->calPredict();
     CP->printPredicts();
+    CP->writePredict();
 }

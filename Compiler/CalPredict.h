@@ -6,18 +6,6 @@
 
 #include"PublicSource.h"
 using namespace std;
-struct LinkListPoints {//链表首尾指针
-	Symbol* head;
-	Symbol* rear;
-	LinkListPoints(Symbol* head, Symbol* rear) {
-		this->head = head;
-		this->rear = rear;
-	}
-};
-struct OrderNum {
-	int num;
-	OrderNum* next;
-};
 class CalPredict//计算产生式
 {
 private:
@@ -44,7 +32,6 @@ public:
 	void printPredicts();//打印全部predict集
 	
 	void insertPredict(int orderNum,Symbol* symbol);//往对应产生式的Predict集里插入符号
-	void insertPredict(int orderNum, LinkListPoints llp);//往对应产生式的Predict集里插入符号链表,参数llp为首尾指针
 	int getCountProduction(ifstream &inFile);//根据文件的行数确定产生式个数
 	void insertFollowSymbol(int i,Symbol symbol);//将该符号的后续符号加入对应产生式的predict集，包括非终极符
 	bool inHistory(Symbol** history, int orderNum, Symbol symbol);//判断是否在操作记录中(insertFollowSymbol函数专用)
