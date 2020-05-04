@@ -98,16 +98,19 @@ void Production::printProduction()
 	}
 }
 
-Symbol* Production::findSymbolInRight(Symbol symbol)
+vector<Symbol*>* Production::findSymbolInRight(Symbol symbol)
 {
+	vector<Symbol*>* v=new vector<Symbol*>(0);
 	Symbol* p=Right;
 	while (p != nullptr) {
 		if (!p->value.compare(symbol.value)) {
-			return p;
+			v->push_back(p);
 		}
 		p = p->next;
 	}
-	return nullptr;
+	if (v->size() == 0)
+		return nullptr;
+	return v;
 }
 
 Production::Production()

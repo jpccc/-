@@ -1,4 +1,6 @@
 ﻿  CalPredict.cpp
-D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(289,31): warning C4018: “<”: 有符号/无符号不匹配
-D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(344,31): warning C4018: “<”: 有符号/无符号不匹配
+D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(115,31): warning C4018: “<”: 有符号/无符号不匹配
+D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(221,27): warning C4018: “<”: 有符号/无符号不匹配
+D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(312,31): warning C4018: “<”: 有符号/无符号不匹配
+D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(367,31): warning C4018: “<”: 有符号/无符号不匹配
   Compiler.vcxproj -> D:\编译原理课程设计\Compiler\Compiler\Debug\Compiler.exe

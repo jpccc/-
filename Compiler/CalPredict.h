@@ -57,4 +57,5 @@ public:
 	vector<int>* isTruePredict(Symbol symbol);//该符号为左部的产生式的predict集是否不包含非终极符，是则返回产生式序号的vector，否则返回空
 	void replaceNT(Symbol symbol, vector<int>* v);//在所有产生式的predict集中替换掉该非终极符
 	void removePredict(int orderNum, Symbol* symbol);//删除predict集中符号
+	bool canBeEpsilon(Symbol symbol);
 };

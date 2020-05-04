@@ -51,9 +51,16 @@ void CalPredict::calFakePredict()
 {
     for (int i = 0; i < CountProduction; i++) {
     	Production prod = Productions[i];
-    	Symbol* right_first = new Symbol(*prod.Right);//取得右部第一个符号
+    	Symbol* right_first = prod.Right;//取得右部第一个符号
     	if (right_first->value != "epsilon") {            
-    		insertPredict(i, right_first);
+    		insertPredict(i,new Symbol(*right_first));
+            while (canBeEpsilon(*right_first)&&(right_first->next!=nullptr)) {
+                insertPredict(i, new Symbol(*right_first->next));
+                right_first = right_first->next;
+            }
+            if (canBeEpsilon(*right_first)&&(right_first->next == nullptr)) {
+                insertFollowSymbol(i, prod.Left);//将所有左部符号的后续符号加入predict集，包括非终极符
+            }
     	}
     	else {
             insertFollowSymbol(i,prod.Left);//将所有左部符号的后续符号加入predict集，包括非终极符
@@ -102,9 +109,12 @@ void CalPredict::getTerminalInfo()
         symbol->isTerminal = false;
         //该非终极符在右部出现时，也应设置为非终极符
         for (int j = 0; j < CountProduction; j++) {
-            Symbol* p=Productions[j].findSymbolInRight(*symbol);
-            if (p != nullptr)
-                p->isTerminal = false;
+            vector<Symbol*>* v=Productions[j].findSymbolInRight(*symbol);
+            if (v == nullptr)
+                continue;
+            for (int i = 0; i < v->size(); i++) {
+                v->at(i)->isTerminal = false;
+            }
         }
     }
 }
@@ -204,21 +214,34 @@ void CalPredict::insertFollowSymbol(int orderNum,Symbol symbol)
     else {
         insertHistory(history, orderNum, symbol);
     }
-    cout << "insertFollow " << orderNum << "," << symbol.value<<endl;
 	for (int i = 0; i < CountProduction; i++) {        
-		Symbol* p = Productions[i].findSymbolInRight(symbol);//在产生式右部找到该符号
-        if (p == nullptr)
+        vector<Symbol*>* v = Productions[i].findSymbolInRight(symbol);//在产生式右部找到该符号
+        if (v ==nullptr)
             continue;
-        if (p->next != nullptr) {
-            if (findInPredict(orderNum, *p->next)==nullptr) {
-				insertPredict(orderNum, new Symbol(*p->next));//有后继符号直接插入
-            }            
-        }
-        else {
-            if (!Productions[i].Left.value.compare(Productions[orderNum].Left.value))
+        for (int j = 0; j < v->size(); j++) {
+            Symbol* p = v->at(j);
+            if (p->next != nullptr) {
+				if (findInPredict(orderNum, *(p->next)) == nullptr) {
+					insertPredict(orderNum, new Symbol(*(p->next)));//有后继符号直接插入
+                    
+				}
+			}
+			else {
+				if (!Productions[i].Left.value.compare(Productions[orderNum].Left.value))
+					continue;
+				insertFollowSymbol(orderNum, Productions[i].Left);//已经是右部最后一个符号，插入该产生式左部的后续符号
                 continue;
-            insertFollowSymbol(orderNum, Productions[i].Left);//已经是右部最后一个符号，插入该产生式左部的后续符号
-        }
+			}
+            p = p->next; 
+			while (canBeEpsilon(*p) && (p->next != nullptr)) {
+				insertPredict(orderNum, new Symbol(*(p->next)));
+				p = p->next;
+			}
+			if (canBeEpsilon(*p) && (p->next == nullptr)) {
+				insertFollowSymbol(orderNum, Productions[i].Left);//将所有左部符号的后续符号加入predict集，包括非终极符
+			}
+			
+        }      
 	}
 }
 
@@ -278,7 +301,7 @@ void CalPredict::killNTsymbol()
 {
     for (int i = 0; i < CountProduction; i++) {
 		Symbol* p = Predict[i];
-        vector<Symbol*>* NTsymbols=new vector<Symbol*>();
+        vector<Symbol*>* NTsymbols=new vector<Symbol*>(0);
 		while (p != nullptr) {
 			if (!p->isTerminal) {
                 NTsymbols->push_back(p);
@@ -320,7 +343,7 @@ void CalPredict::setTruePredict()
 
 vector<int>* CalPredict::isTruePredict(Symbol symbol)
 { 
-    vector<int>* v=new vector<int>();
+    vector<int>* v=new vector<int>(0);
     int* head = nullptr;
 	for (int i = 0; i < CountProduction; i++) {
 		if (!Productions[i].Left.value.compare(symbol.value)) {
@@ -342,6 +365,9 @@ void CalPredict::replaceNT(Symbol symbol, vector<int>* v)
         if (NTsymbol!=nullptr) {
             removePredict(i,NTsymbol);//删除predict集中符号
             for (int j = 0; j < v->size(); j++) {
+                if (!Productions[(*v)[j]].Right->value.compare("epsilon")) {
+                    continue;
+                }
                 Symbol* p = Predict[(*v)[j]];
                 while (p != nullptr) {
                     if(findInPredict(i,*p)==nullptr)
@@ -369,8 +395,19 @@ void CalPredict::removePredict(int orderNum, Symbol* symbol)
     if (symbol == PredictRear[orderNum]) {
             PredictRear[orderNum] = last;
     }	
-    cout << Predict[orderNum] << " " << PredictRear[orderNum] << endl;
 	delete(symbol);
+}
+
+bool CalPredict::canBeEpsilon(Symbol symbol)
+{
+    for (int i = 0; i < CountProduction; i++) {
+        if (!Productions[i].Left.value.compare(symbol.value)) {
+            if (!Productions[i].Right->value.compare("epsilon")) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 CalPredict::CalPredict()

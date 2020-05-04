@@ -1,6 +1,7 @@
 #pragma once
 #include<string>
 #include<iostream>
+#include<vector>
 using namespace std;
 enum TokenType {
 	ID,//标识符
@@ -47,7 +48,7 @@ struct Production {//产生式
 	Symbol* RightRear;//产生式右部链表尾指针
 	void insertRight(Symbol* symbol);//产生式右部增加符号
 	void printProduction();
-	Symbol* findSymbolInRight(Symbol symbol);//在产生式右部找到该符号并返回
+	vector<Symbol*>* findSymbolInRight(Symbol symbol);//在产生式右部找到该符号并返回
 	Production();
 };
 bool isLetter(char ch);//判断字符是否为字母
