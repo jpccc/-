@@ -112,7 +112,7 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 				break;
 			}
 			backOne(count, CurrentChar, NextChar);
-			if (CurrentChar == ' ')
+			if (CurrentChar == ' '|| CurrentChar=='\n')
 			{
 				finded = true;
 				break;

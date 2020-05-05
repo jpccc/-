@@ -2,6 +2,9 @@
 #include<string>
 #include<iostream>
 #include<vector>
+#include <set>
+#include<stack>
+#include<fstream>
 using namespace std;
 enum TokenType {
 	ID,//标识符
@@ -22,7 +25,7 @@ enum State {//状态机中的状态
 };
 // State(error-S7)直接转向伐状态机中的状态,State(error-S2)状态转换矩阵法中的状态
 const int reserved_count = 21;
-static const char* reserved_word[reserved_count] = { "char","int","var","program","integer","procedure","array","begin","while","if","then","else","endwh",
+static const char* reserved_word[reserved_count] = { "char","int","var","Program","integer","procedure","array","begin","while","if","then","else","endwh",
 "end","read","of","record","fi","return","write","type" };
 const int OneCharDelimiter_count = 16;
 static const char oneChar_delimiter[OneCharDelimiter_count] = { '+','-','*','/','<','=','>','(',')','[',']','.',';',EOF,' ','\n' };

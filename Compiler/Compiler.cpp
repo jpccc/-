@@ -14,7 +14,7 @@ int main()
    // return 0;
     ///********************************读入源程序********************************/
     
-    string filename = "file/test1.txt";//debug目录下
+    string filename = "file/program0.txt";//debug目录下
     string input;//存储源程序
     ReadChar(filename, input);
     ///***********************词法分析返回Token序列,注释直接丢弃****************/
@@ -34,10 +34,10 @@ int main()
     GrammarAnalyzer grammarAnalyzer(start);
     grammarAnalyzer.initialize();
     ////grammarAnalyzer.test();
-    //if(grammarAnalyzer.GrammarAnalyzers())
-    //    cout << "语法分析成功" << endl;
-    //else
-    //    cout << "语法分析失败" << endl;
+    if(grammarAnalyzer.GrammarAnalyzers())
+        cout << "语法分析成功" << endl;
+    else
+        cout << "语法分析失败" << endl;
 }
 void ReadChar(string fileName,string& input) {
     fstream inFile;

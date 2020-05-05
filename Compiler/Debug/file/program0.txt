@@ -1,0 +1,9 @@
+program p
+	TYPE t=INTEGER;
+	VAR t v1;
+	CHAR v2;
+
+	BEGIN
+		READ(v1);
+		v1:=v1+10;
+end
