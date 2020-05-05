@@ -1,6 +1,5 @@
-﻿  CalPredict.cpp
-D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(142,31): warning C4018: “<”: 有符号/无符号不匹配
-D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(230,27): warning C4018: “<”: 有符号/无符号不匹配
-D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(321,31): warning C4018: “<”: 有符号/无符号不匹配
-D:\编译原理课程设计\Compiler\Compiler\CalPredict.cpp(376,31): warning C4018: “<”: 有符号/无符号不匹配
-  Compiler.vcxproj -> D:\编译原理课程设计\Compiler\Compiler\Debug\Compiler.exe
+﻿  Compiler.cpp
+  GrammerAnalyzer.cpp
+  正在生成代码...
+E:\项目\C++\jpccc\Compiler\Compiler\GrammerAnalyzer.cpp(90): warning C4715: “GrammarAnalyzer::nLocation”: 不是所有的控件路径都返回值
+  Compiler.vcxproj -> E:\项目\C++\jpccc\Compiler\Compiler\Debug\Compiler.exe

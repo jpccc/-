@@ -149,12 +149,14 @@
   <ItemGroup>
     <ClCompile Include="CalPredict.cpp" />
     <ClCompile Include="Compiler.cpp" />
+    <ClCompile Include="GrammerAnalyzer.cpp" />
     <ClCompile Include="LexicalAnalyzerByJPC.cpp" />
     <ClCompile Include="LexicalAnalyzerByTS.cpp" />
     <ClCompile Include="publicSource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalPredict.h" />
+    <ClInclude Include="GrammarSource.h" />
     <ClInclude Include="LexicalAnalyzerByJPC.h" />
     <ClInclude Include="LexicalAnalyzerByTS.h" />
     <ClInclude Include="PublicSource.h" />

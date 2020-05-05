@@ -1,6 +1,2 @@
-E:\项目\C++\编译原理\jpccc\Compiler\Compiler\Debug\Compiler.exe
-E:\项目\C++\编译原理\jpccc\Compiler\Compiler\Debug\Compiler.pdb
 E:\项目\C++\jpccc\Compiler\Compiler\Debug\Compiler.exe
 E:\项目\C++\jpccc\Compiler\Compiler\Debug\Compiler.pdb
-E:\项目\C++\Compiler\Compiler\Debug\Compiler.exe
-E:\项目\C++\Compiler\Compiler\Debug\Compiler.pdb

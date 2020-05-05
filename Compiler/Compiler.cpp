@@ -4,33 +4,35 @@
 #include<fstream>
 #include "LexicalAnalyzerByJPC.h"
 #include"LexicalAnalyzerByTS.h"
-#include"GrammarSource.h"
-#include"CalPredict.h"
+#include "GrammarSource.h"
+#include "CalPredict.h"
 using namespace std;
 void ReadChar(string fileName, string& input);
 int main()
 {
-    CalPredict::debugging();//调试程序
-    return 0;
+    //CalPredict::debugging();//调试程序
+   // return 0;
     ///********************************读入源程序********************************/
-    //string filename = "file/test1.txt";//debug目录下
-    //string input;//存储源程序
-    //ReadChar(filename, input);
+    
+    string filename = "file/test1.txt";//debug目录下
+    string input;//存储源程序
+    ReadChar(filename, input);
     ///***********************词法分析返回Token序列,注释直接丢弃****************/
-    //LexicalAnalyzerByJPC lexicalAnalyzer(input);
-    //lexicalAnalyzer.makeTokenList();
-    //Token* t = lexicalAnalyzer.getToken();
-    //Token* start = t;
-    //
-    //cout << "Token序列如下" << endl;
-    //while (t!= NULL) {
-    //    cout << t->value << "  " << t->type << endl;
-    //    t = t->next;
-    //}
+    LexicalAnalyzerByJPC lexicalAnalyzer(input);
+    lexicalAnalyzer.makeTokenList();
+    Token* t = lexicalAnalyzer.getToken();
+    Token* start = t;
+    
+    cout << "Token序列如下" << endl;
+    while (t!= NULL) {
+        cout << t->value << "  " << t->type << endl;
+        t = t->next;
+    }
     ///********************************语法分析********************************/
+   
 
-    //GrammarAnalyzer grammarAnalyzer(start);
-    //grammarAnalyzer.initialize();
+    GrammarAnalyzer grammarAnalyzer(start);
+    grammarAnalyzer.initialize();
     ////grammarAnalyzer.test();
     //if(grammarAnalyzer.GrammarAnalyzers())
     //    cout << "语法分析成功" << endl;
