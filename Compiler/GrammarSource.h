@@ -57,7 +57,7 @@ public:
 			expressionRight[i] = new Nodes();
 			Predicts[i] = new Nodes();
 		}
-		Stack.push("EOF");
+		Stack.push(".");
 		Stack.push("Program");
 		cout << "初始化语法分析****************************************************************" << endl;
 	}

@@ -14,7 +14,7 @@ int main()
    // return 0;
     ///********************************读入源程序********************************/
     
-    string filename = "file/program1.txt";//debug目录下
+    string filename = "file/program0.txt";//debug目录下
     string input;//存储源程序
     ReadChar(filename, input);
     ///***********************词法分析返回Token序列,注释直接丢弃****************/

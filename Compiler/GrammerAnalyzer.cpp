@@ -98,6 +98,10 @@ int GrammarAnalyzer::nLocation(string st) {
 }
 int GrammarAnalyzer::tLocation(string st) {
 	int location = 0;
+	if (currentToken->type == ID)
+			st = "ID";
+	if (currentToken->type == INTC)
+			st = "INTC";
 	for (set<string>::iterator it = sets_T.begin(); it != sets_T.end(); it++)
 		if (st.compare(*it) == 0)
 			return location;
@@ -136,13 +140,9 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 				sCharacter = Stack.top();
 				Stack.pop();
 			}//空的时候去匹配（？？？）
-			cout << "栈1：" << sCharacter << " ";
+			cout << "栈：" << sCharacter << " ";
 
 			tCharacter = currentToken->value;
-			if (currentToken->type == ID)
-				tCharacter = "ID";
-			if (currentToken->type == INTC)
-				tCharacter = "INTC";
 			cout << tCharacter << endl;
 		
 			if (!isNCharacter(sCharacter)) //是终极符
@@ -157,10 +157,19 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 				}
 				else
 				{
-					if (!match(sCharacter, tCharacter))
+					if (sCharacter.compare("INTC") == 0) {
+						if (currentToken->type != INTC) {
+							cout << sCharacter << "与" << tCharacter << "不匹配" << endl;
+							return false;
+						}
+					}
+					else
 					{
-						cout << sCharacter << "与" << tCharacter << "不匹配" << endl;
-						return false;
+						if (!match(sCharacter, tCharacter))
+						{
+							cout << sCharacter << "与" << tCharacter << "不匹配" << endl;
+							return false;
+						}
 					}
 				}
 				currentToken = currentToken->next;
@@ -194,12 +203,18 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 				}
 			}
 		}
+		if (currentToken->value == "EOF")
+		{
+			currentToken = currentToken->next;
+			break;
+		}
 	}
 	if (Stack.empty() && currentToken == NULL)
 	{
 		cout << "堆栈、输入流均为空" << endl;
 		return true;
 	}
+
 	return false;
 }
 void GrammarAnalyzer::test() {
