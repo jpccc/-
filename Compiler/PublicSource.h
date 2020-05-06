@@ -24,11 +24,14 @@ enum State {//状态机中的状态
 	S2, S3, S4, S5, S6
 };
 // State(error-S7)直接转向伐状态机中的状态,State(error-S2)状态转换矩阵法中的状态
-const int reserved_count = 28;
+const int reserved_count = 44;
 static const char* reserved_word[reserved_count] = { "char","int","var","Program","integer","procedure","array","begin","while","if","then","else","endwh",
-"end","read","of","record","fi","return","write","type" ,"VAR","INTEGER","PROGRAM","TYPE","CHAR","BEGIN","END"};
-const int OneCharDelimiter_count = 16;
-static const char oneChar_delimiter[OneCharDelimiter_count] = { '+','-','*','/','<','=','>','(',')','[',']','.',';',EOF,' ','\n' };
+"end","read","of","record","fi","return","write","type","do" ,
+"INT","ARRAY","ENDWH","READ","OF","RECOED","RETURN","WRITE","VAR","INTEGER","PROGRAM","TYPE","CHAR","BEGIN","END","PROCEDURE","IF","THEN","ELSE","FI","WHILE","DO"};
+//ARRAY   BEGIN   CHAR    DO      ELSE    END     ENDWH   FI      ID      IF      INTC    INTEGER OF      PROCEDURE       PROGRAM READ    RECORD  RETURN  THEN    TYPE    VAR     WHILE   WRITE   [       ]       epsilon
+const int OneCharDelimiter_count = 17;
+static const char oneChar_delimiter[OneCharDelimiter_count] = { '+','-','*','/','<','=','>','(',')','[',']','.',';',EOF,' ','\n',',' };
+
 struct Token {
 	TokenType type;//类型
 	string value;//内容

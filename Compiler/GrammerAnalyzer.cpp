@@ -44,16 +44,14 @@ void GrammarAnalyzer::initialize() {
 		}
 		rol++;//处理下一个产生式		
 	}
-
-
 	//挑选出终极符
 	for (set<string>::iterator it = sets_B.begin(); it != sets_B.end(); it++)
 		if (!sets_N.count(*it))
 			sets_T.insert(*it);
 	//初始化分析表
-	sets_T.insert("EOF");
+	//sets_T.insert("EOF");
 	int nCount = sets_N.size();
-	int tCount = sets_T.size();//1是#
+	int tCount = sets_T.size();
 	AnalysisTable = new int* [nCount];
 	for (int i = 0; i < nCount; i++)
 		AnalysisTable[i] = new int[tCount] {0};
@@ -70,22 +68,27 @@ void GrammarAnalyzer::initialize() {
 		}
 	}
 
+	
+	/*
 	cout << "终极符***************************************************************" << endl;
 	for (set<string>::iterator it = sets_T.begin(); it != sets_T.end(); it++)
 	{
 		cout << *it << "	";
 	}
 	cout << endl;
+	*/
+	
 }
 void GrammarAnalyzer::popnCharacter(int expressNumber) {
 	Nodes* node = expressionRight[expressNumber - 1];
 	Node* nodes = node->getRear();
-	while(nodes!=NULL){
-		//cout << "压栈:" << nodes->value << "	";
-		Stack.push(nodes->value);
+	while(nodes!=NULL)
+	{
+		if (nodes->value.compare("epsilon") != 0) {
+			Stack.push(nodes->value);
+		}	
 		nodes = nodes->last;
 	}
-	cout << endl;
 }
 int GrammarAnalyzer::nLocation(string st) {
 	int location = 0;
@@ -107,6 +110,7 @@ int GrammarAnalyzer::tLocation(string st) {
 			return location;
 		else
 			location++;
+	//将小写变成大写解决程序中小写问题
 	return -1;//-1即没找到
 }
 bool GrammarAnalyzer::isNCharacter(string st) {//是否是非终极符
@@ -136,10 +140,6 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 			sCharacter = Stack.top();
 			Stack.pop();
 
-			while (sCharacter.compare("epsilon") == 0) {
-				sCharacter = Stack.top();
-				Stack.pop();
-			}//空的时候去匹配（？？？）
 			cout << "栈：" << sCharacter << " ";
 
 			tCharacter = currentToken->value;
@@ -173,8 +173,7 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 					}
 				}
 				currentToken = currentToken->next;
-				if (currentToken == NULL)
-					cout << "输入流为空" << endl;
+				cout << "匹配成功" << endl;
 			}
 			else
 			{

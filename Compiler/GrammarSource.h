@@ -59,6 +59,7 @@ public:
 		}
 		Stack.push(".");
 		Stack.push("Program");
+		initialize();
 		cout << "初始化语法分析****************************************************************" << endl;
 	}
 	bool GrammarAnalyzers();

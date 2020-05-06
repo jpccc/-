@@ -87,7 +87,7 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 			finded = true;//找到一个单词
 			break;
 		case S2:		//数字
-			word = word + CurrentChar;		//这时CurrentChar肯定是字母
+			word = word + CurrentChar;		//这时CurrentChar肯定是数字
 			CurrentChar = readOne(count);
 			if (isNumber(CurrentChar))
 			{
@@ -117,12 +117,12 @@ void LexicalAnalyzerByJPC::makeTokenList() {
 				finded = true;
 				break;
 			}
-			tokenType = OneCharDelimiter;
 			if (CurrentChar == EOF)//结束标志,count指向下一个要读的位置,结束后在数值上等于iSize
 			{
 				insert_List(new Token(tokenType, "EOF"));//EOF
 				return;//结束了
-			}
+			}//不能放在backOne的前面，这样会少处理一个字符
+			tokenType = OneCharDelimiter;
 			insert_List(new Token(tokenType,word));
 			finded = true;
 			break;

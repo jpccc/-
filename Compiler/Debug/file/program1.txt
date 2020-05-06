@@ -1,37 +1,40 @@
 PROGRAM bubble
 VAR INTEGER i,j,num;
-	ARRAY [1..20] of INTEGER a;
+	ARRAY [1..20] OF INTEGER a;
 PROCEDURE q(INTEGER num);
 VAR INTEGER i,j,k;
 	INTEGER t;
 BEGIN
-i=1;
-while i<num do
+i:=1;
+j:=1;
+WHILE i<num DO
 	j:=num-i+1;
-	k=1;
-	while k<j do
-	if a[k+1]<a[k]
-	then
+	k:=1;
+	WHILE k<j DO
+	IF a[k+1]<a[k]
+	THEN
 		t:=a[k];
 		a[k]:=a[k+1];
-		a[k+1]:=t;
-	else temp:=0
-	fi;
-	k=k+1;
-endeh
-end
-begin
-read(num);
+		a[k+1]:=t
+	ELSE t:=0
+	FI;
+k:=k+1
+ENDWH;
+i:=i+1
+ENDWH
+END
+BEGIN
+READ(num);
 i:=1;
-while i<(num+1) do
-	read(j);
+WHILE i<(num+1) DO
+	READ(j);
 	a[i]:=j;
-	i:=i+1;
-endth;
+	i:=i+1
+ENDWH;
 q(num);
 i:=1;
-while i<(num+1) do
-	write(a[i]);
+WHILE i<(num+1) DO
+	WRITE(a[i]);
 	i:=i+1
-endeh
-end.
+ENDWH
+END.
