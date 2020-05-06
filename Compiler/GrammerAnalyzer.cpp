@@ -1,6 +1,6 @@
 #include"GrammarSource.h"
 void GrammarAnalyzer::initialize() {
-	string fileName = "file/expression.txt";
+	string fileName = "file/expression.txt";//打开存放预测集的文件
 	fstream inFile;
 	inFile.open(fileName);
 	if (!inFile.is_open()) {
@@ -17,16 +17,15 @@ void GrammarAnalyzer::initialize() {
 	int rol = 0;//行数，即在104个产生式中的位置
 	while (getline(inFile, temp))
 	{
-		location = temp.find(":");	//第一个冒号
+		location = temp.find("?");	//第一个冒号
 		left = temp.substr(0, location);//产生式左部*****这样做是SNL因为产生式左部都是一个符号
 		expressionLeft[rol]->insert(new Node(left));
 		sets_N.insert(left);
 		temp = temp.substr(location + 1);//删除产生式左部
 
-		location = temp.find(":");//第二个冒号
+		location = temp.find("?");//第二个冒号
 		right = temp.substr(0, location);//产生式右边
 		predict = temp.substr(location + 1);//预测集
-
 		while (right.size() != 0) {	//产生式右部
 			location = right.find(",");
 			expressionRight[rol]->insert(new Node(right.substr(0, location)));
@@ -46,6 +45,8 @@ void GrammarAnalyzer::initialize() {
 		rol++;//处理下一个产生式		
 	}
 
+
+	//挑选出终极符
 	for (set<string>::iterator it = sets_B.begin(); it != sets_B.end(); it++)
 		if (!sets_N.count(*it))
 			sets_T.insert(*it);
@@ -57,6 +58,7 @@ void GrammarAnalyzer::initialize() {
 	for (int i = 0; i < nCount; i++)
 		AnalysisTable[i] = new int[tCount] {0};
 	int x, y;
+
 	for (int i = 0; i < expressionNumber; i++) {
 		Node* node_N=expressionLeft[i]->getHead();
 		Node* node_P = Predicts[i]->getHead();
@@ -72,7 +74,7 @@ void GrammarAnalyzer::popnCharacter(int expressNumber) {
 	Nodes* node = expressionRight[expressNumber - 1];
 	Node* nodes = node->getRear();
 	while(nodes!=NULL){
-		cout << "压栈:" << nodes->value << "	";
+		//cout << "压栈:" << nodes->value << "	";
 		Stack.push(nodes->value);
 		nodes = nodes->last;
 	}
@@ -122,11 +124,20 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 		{
 			sCharacter = Stack.top();
 			Stack.pop();
+
+			while (sCharacter.compare("epsilon") == 0) {
+				sCharacter = Stack.top();
+				Stack.pop();
+			}
 			cout << "栈1：" << sCharacter << " ";
 
 			tCharacter = currentToken->value;
+			if (currentToken->type == ID)
+				tCharacter = "ID";
+			if (currentToken->type == INTC)
+				tCharacter = "INTC";
 			cout << tCharacter << endl;
-
+		
 			if (!isNCharacter(sCharacter)) //是终极符
 			{
 				cout << "进入终极符" << endl;
@@ -147,26 +158,26 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 				}
 				currentToken = currentToken->next;
 				if (currentToken == NULL)
-					cout << "空" << endl;
-				else
-					cout << "toooooooooooooooooooooooooooooooooooooooooo" << currentToken->value << endl;
+					cout << "输入流为空" << endl;
 			}
 			else
 			{
 				cout << "进入非终极符" << endl;
 				xx = nLocation(sCharacter);
 				yy = tLocation(tCharacter);
+				//cout << xx << "		" << yy << endl;
+				//cout << AnalysisTable[xx][yy] << endl;
 				if (yy == -1) {	//没找到终极符
 					cout << "没找到终极符" << endl;
 					return false;
 				}
 				cout << "xy" << xx << "," << yy << endl;
 				expressNumber = AnalysisTable[xx][yy];
-				cout << "表达式编号:" << expressNumber << endl;
+				cout << "替换表达式编号:" << expressNumber << endl;
 				if (expressNumber == 0)
 				{
-					cout << sCharacter << ",,," << tCharacter << endl;
-					cout << xx << ",," << yy << endl;;
+					cout << sCharacter << "," << tCharacter << endl;
+					//cout << xx << "," << yy << endl;;
 					cout << "ss_error" << endl;
 					return false;
 				}
@@ -177,7 +188,12 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 			}
 		}
 	}
-	return true;
+	if (Stack.empty() && currentToken == NULL)
+	{
+		cout << "堆栈、输入流均为空" << endl;
+		return true;
+	}
+	return false;
 }
 void GrammarAnalyzer::test() {
 }

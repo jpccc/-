@@ -82,7 +82,7 @@ void CalPredict::writePredict()
     }
     for (int i = 0; i < CountProduction; i++) {
         outFile << Productions[i].Left.value;
-        outFile << ":";
+        outFile << "?";
         Symbol* p = Productions[i].Right;
         outFile << p->value;
         p = p->next;
@@ -90,7 +90,7 @@ void CalPredict::writePredict()
             outFile <<","<< p->value;
             p = p->next;
         }
-        outFile<< ":";
+        outFile<< "?";
         p = Predict[i];
         outFile << p->value;
         p = p->next;

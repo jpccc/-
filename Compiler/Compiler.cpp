@@ -23,7 +23,7 @@ int main()
     Token* t = lexicalAnalyzer.getToken();
     Token* start = t;
     
-    cout << "Token序列如下" << endl;
+    cout << "Token序列如下************************************************************" << endl;
     while (t!= NULL) {
         cout << t->value << "  " << t->type << endl;
         t = t->next;

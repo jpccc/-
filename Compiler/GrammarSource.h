@@ -59,7 +59,7 @@ public:
 		}
 		Stack.push("EOF");
 		Stack.push("Program");
-		cout << "初始化" << endl;
+		cout << "初始化语法分析****************************************************************" << endl;
 	}
 	bool GrammarAnalyzers();
 	bool match(string sc, string tc);

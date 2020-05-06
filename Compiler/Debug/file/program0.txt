@@ -1,4 +1,4 @@
-program p
+PROGRAM p
 	TYPE t=INTEGER;
 	VAR t v1;
 	CHAR v2;
@@ -6,4 +6,5 @@ program p
 	BEGIN
 		READ(v1);
 		v1:=v1+10;
-end
+	WRITE(v1)
+END
