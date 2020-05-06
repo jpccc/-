@@ -27,7 +27,7 @@ void GrammarAnalyzer::initialize() {
 		right = temp.substr(0, location);//产生式右边
 		predict = temp.substr(location + 1);//预测集
 		while (right.size() != 0) {	//产生式右部
-			location = right.find(",");
+			location = right.find("!");
 			expressionRight[rol]->insert(new Node(right.substr(0, location)));
 			sets_B.insert(right.substr(0, location));
 			if (location == string::npos)//已经没有逗号了，说明处理完了
@@ -36,7 +36,7 @@ void GrammarAnalyzer::initialize() {
 		}	
     	//预测集
 		while (predict.size() != 0) {
-			location = predict.find(",");
+			location = predict.find("!");
 			Predicts[rol]->insert(new Node(predict.substr(0, location)));
 			if (location == string::npos)//已经没有逗号了，说明处理完了
 				break;
@@ -69,6 +69,13 @@ void GrammarAnalyzer::initialize() {
 			node_P = node_P->next;
 		}
 	}
+
+	cout << "终极符***************************************************************" << endl;
+	for (set<string>::iterator it = sets_T.begin(); it != sets_T.end(); it++)
+	{
+		cout << *it << "	";
+	}
+	cout << endl;
 }
 void GrammarAnalyzer::popnCharacter(int expressNumber) {
 	Nodes* node = expressionRight[expressNumber - 1];
@@ -128,7 +135,7 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 			while (sCharacter.compare("epsilon") == 0) {
 				sCharacter = Stack.top();
 				Stack.pop();
-			}
+			}//空的时候去匹配（？？？）
 			cout << "栈1：" << sCharacter << " ";
 
 			tCharacter = currentToken->value;
@@ -196,4 +203,5 @@ bool GrammarAnalyzer::GrammarAnalyzers() {
 	return false;
 }
 void GrammarAnalyzer::test() {
+
 }

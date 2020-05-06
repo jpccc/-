@@ -44,7 +44,7 @@ private:
 	Token* currentToken;
 	int** AnalysisTable;//分析表
 	Nodes* expressionLeft[expressionNumber];		//产生式左部
-	Nodes* expressionRight[expressionNumber];		//产生式右边，从大往小用Node
+	Nodes* expressionRight[expressionNumber];		//产生式右边
 	Nodes* Predicts[expressionNumber];
 	set<string> sets_N;
 	set<string> sets_T;

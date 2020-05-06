@@ -1,6 +1,6 @@
 #include "CalPredict.h"
-const string CalPredict::ProductionPath = "Debug/file/production.txt";
-const string CalPredict::ExpressionPath = "Debug/file/expression.txt";
+const string CalPredict::ProductionPath = "file/production.txt";
+const string CalPredict::ExpressionPath = "file/expression.txt";
 void CalPredict::readProductions()
 {
 	ifstream inFile;
@@ -87,7 +87,7 @@ void CalPredict::writePredict()
         outFile << p->value;
         p = p->next;
         while (p != nullptr) {
-            outFile <<","<< p->value;
+            outFile <<"!"<< p->value;
             p = p->next;
         }
         outFile<< "?";
@@ -95,7 +95,7 @@ void CalPredict::writePredict()
         outFile << p->value;
         p = p->next;
         while (p != nullptr) {
-            outFile << "," << p->value;
+            outFile << "!" << p->value;
             p = p->next;
         }
         outFile << endl;
